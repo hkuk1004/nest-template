@@ -1,0 +1,55 @@
+###############################################
+# post-api.http
+# 게시글 CRUD 테스트
+# - userToken 은 .vscode/settings.json 또는 user-api.http 의 로그인 응답에서 받아서 채워넣기
+###############################################
+
+@postId = 1
+
+### 1. 게시글 작성 (인증 필요) — 응답의 id 를 위 @postId 에 반영
+POST {{baseUrl}}/post
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "title": "첫 게시글입니다",
+  "content": "본문 내용입니다.\n여러 줄도 가능합니다."
+}
+
+### 2. 게시글 목록 조회 (인증 불필요) — 페이징
+GET {{baseUrl}}/post?page=1&take=10
+
+### 3. 게시글 목록 조회 — 키워드 검색
+GET {{baseUrl}}/post?page=1&take=10&keyword=첫
+
+### 4. 게시글 상세 조회 (인증 불필요)
+GET {{baseUrl}}/post/{{postId}}
+
+### 5. 게시글 수정 (본인 글만) — 제목만 변경
+PATCH {{baseUrl}}/post/{{postId}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "title": "수정된 제목입니다"
+}
+
+### 6. 게시글 수정 — 제목 + 본문 둘 다
+PATCH {{baseUrl}}/post/{{postId}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "title": "최종 제목",
+  "content": "최종 본문"
+}
+
+### 7. 게시글 삭제 (본인 글만, Soft Delete)
+DELETE {{baseUrl}}/post/{{postId}}
+Authorization: Bearer {{userToken}}
+
+###############################################
+# 권한 체크 케이스 테스트
+# - 다른 계정으로 로그인 → userToken 갈아끼우고 #5/#7 호출 시 403 Forbidden 응답
+# - 토큰 없이 #1/#5/#7 호출 시 400 BadRequest (Guard 에서 차단)
+###############################################

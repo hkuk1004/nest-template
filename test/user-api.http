@@ -1,0 +1,71 @@
+###############################################
+# user-api.http
+# VS Code REST Client 확장에서 사용
+# - 환경 변수는 .vscode/settings.json 의 rest-client.environmentVariables 사용
+# - VS Code 우측 하단에서 "local" 환경 선택 후 사용
+###############################################
+
+@email = test@example.com
+@password = qwer1234
+
+### 1. 이메일 중복 검사
+GET {{baseUrl}}/user/exist-email/{{email}}
+
+### 2. 회원가입
+POST {{baseUrl}}/user/sign-up
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "name": "홍길동"
+}
+
+### 3. 이메일/비밀번호 로그인 — 응답의 accessToken.value 를 .vscode/settings.json 의 userToken 에 붙여넣기
+POST {{baseUrl}}/user/login-email-password
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### 4. 내 정보 조회 (인증 필요)
+GET {{baseUrl}}/user/me
+Authorization: Bearer {{userToken}}
+
+### 5. 내 정보 수정 (인증 필요) — 이름만 변경
+PATCH {{baseUrl}}/user/me
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "name": "수정된이름"
+}
+
+### 6. 회원 탈퇴 (인증 필요, Soft Delete)
+DELETE {{baseUrl}}/user/me
+Authorization: Bearer {{userToken}}
+
+### 7. Access Token 재발급 — body 의 token 에 refreshToken.value 입력
+POST {{baseUrl}}/user/access-by-refresh
+Content-Type: application/json
+
+{
+  "token": "여기에_refreshToken_value_붙여넣기"
+}
+
+### 8. Refresh Token 재발급 (access + refresh 둘 다 새로)
+POST {{baseUrl}}/user/refresh-by-refresh
+Content-Type: application/json
+
+{
+  "token": "여기에_refreshToken_value_붙여넣기"
+}
+
+###############################################
+# 인증 흐름 메모
+# - 회원가입 (#2) → 로그인 (#3) → 응답의 accessToken.value 복사
+# - .vscode/settings.json 의 userToken 에 붙여넣고 저장
+# - 이후 #4~#6, #8 호출 시 자동으로 헤더에 포함됨
+###############################################

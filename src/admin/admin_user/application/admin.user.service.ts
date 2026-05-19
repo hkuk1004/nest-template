@@ -42,8 +42,6 @@ export class AdminUserService {
       id: admin.id,
       email: admin.email,
       name: admin.name,
-      phoneNumber: null, // 관리자는 전화번호 불필요
-      authority: admin.authority,
     });
 
     return {

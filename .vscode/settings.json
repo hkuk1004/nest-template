@@ -1,0 +1,16 @@
+{
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "baseUrl": "http://localhost:3000"
+    },
+    "local": {
+      "baseUrl": "http://localhost:3000",
+      "userid": "test@example.com",
+      "userpwd": "qwer1234",
+      "userToken": "여기에_로그인_후_받은_accessToken.value_를_붙여넣기",
+      "adminId": "admin@example.com",
+      "adminPwd": "admin1234",
+      "adminToken": "여기에_관리자_accessToken_을_붙여넣기"
+    }
+  }
+}

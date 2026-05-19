@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UserSocialModule } from './user_social/user.social.module';
 import { AdminUserModule } from './admin/admin_user/admin.user.module';
+import { UserModule } from './user/core/user.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { AdminUserModule } from './admin/admin_user/admin.user.module';
     AuthModule,
     UserSocialModule,
     AdminUserModule,
+    UserModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [],
